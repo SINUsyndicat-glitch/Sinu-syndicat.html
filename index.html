@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SINU Mafia Syndicate - بوابة الألعاب</title>
-    <!-- استدعاء مكتبة Ethers.js للربط مع المحفظة والعقد -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <style>
         body {
@@ -69,14 +68,12 @@
 
     <hr style="border-color: #333; margin: 20px 0;">
 
-    <!-- قسم الموافقة Approve -->
     <h3>1. تفعيل صلاحية التوكن (Approve)</h3>
     <input type="number" id="approveAmount" placeholder="الكمية المراد الموافقة عليها (مثلاً: 1000000)">
     <button class="btn" onclick="approveToken()">تنفيذ Approve</button>
 
     <hr style="border-color: #333; margin: 20px 0;">
 
-    <!-- قسم PvP التحدي المستهدف -->
     <h3>2. نظام المبارزة (Targeted PvP)</h3>
     <input type="text" id="targetAddress" placeholder="عنوان محفظة الخصم (Target Address)">
     <input type="number" id="bountyAmount" placeholder="مبلغ التحدي بـ SINU">
@@ -88,7 +85,6 @@
 
     <hr style="border-color: #333; margin: 20px 0;">
 
-    <!-- قسم PvE الاغتيال السريع -->
     <h3>3. هجوم المافيا الآلي (PvE Hit)</h3>
     <p style="font-size: 12px; color: #aaa;">تكلفة الهجوم: 5000 رمز SINU تُرسل للحرق</p>
     <button class="btn" style="background-color: #ff9900;" onclick="executePve()">تنفيذ اغتيال PvE 🔥</button>
@@ -97,23 +93,29 @@
 </div>
 
 <script>
-    // الإعدادات البرمجية للعقود على شبكة Base
-    const SINU_TOKEN_ADDRESS = "0x56bB247c424958948B63de291A0C7f45d8651B76"; 
+    // الإعدادات البرمجية للعقود على شبكة Base المستخرجة من ملفاتك
+    const SINU_TOKEN_ADDRESS = "0x56bB247c424958948B63de291A0C7f45d8651B76";
     const GAME_CONTRACT_ADDRESS = "0x3E71427c4F4c3aE6DBA472Ccb17076E2148A1231";
 
-    // الـ ABI المصغر للدوال التي يحتاجها الـ HTML للتفاعل
-    const SINU_ABI = ["[{"internalType":"address","name":"_sinuTokenAddress","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"OwnableInvalidOwner","type":"error"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"OwnableUnauthorizedAccount","type":"error"},{"inputs":[],"name":"ReentrancyGuardReentrantCall","type":"error"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"SafeERC20FailedOperation","type":"error"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"challengeId","type":"uint256"},{"indexed":true,"internalType":"address","name":"winner","type":"address"},{"indexed":true,"internalType":"address","name":"loser","type":"address"},{"indexed":false,"internalType":"uint256","name":"prizeWon","type":"uint256"}],"name":"BattleResolved","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"challengeId","type":"uint256"},{"indexed":true,"internalType":"address","name":"creator","type":"address"},{"indexed":true,"internalType":"address","name":"target","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"BountyCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"player","type":"address"},{"indexed":false,"internalType":"uint256","name":"burnedAmount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"randomOutcome","type":"uint256"}],"name":"PveHitExecuted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"player","type":"address"},{"indexed":false,"internalType":"string","name":"itemType","type":"string"},{"indexed":false,"internalType":"uint256","name":"tokensBurned","type":"uint256"}],"name":"SurvivalUsed","type":"event"},{"inputs":[],"name":"BURN_ADDRESS","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_challengeId","type":"uint256"}],"name":"acceptAndFight","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_burnFee","type":"uint256"},{"internalType":"uint256","name":"_devFee","type":"uint256"}],"name":"adjustFees","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_hitBurn","type":"uint256"},{"internalType":"uint256","name":"_adrenaline","type":"uint256"},{"internalType":"uint256","name":"_smoke","type":"uint256"}],"name":"adjustPveCosts","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"adrenalineCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"burnFeePercent","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_itemType","type":"uint256"}],"name":"buySurvivalItem","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"challengeCounter","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"challenges","outputs":[{"internalType":"address","name":"creator","type":"address"},{"internalType":"address","name":"target","type":"address"},{"internalType":"uint256","name":"bountyAmount","type":"uint256"},{"internalType":"bool","name":"isAccepted","type":"bool"},{"internalType":"bool","name":"isResolved","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_target","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"createBountyChallenge","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"devFeePercent","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"executePveAssassination","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pveAssassinationBurn","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"sinuToken","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"smokeBombCost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+    // 1. الـ ABI القياسي لتوكن ERC20 لتنفيذ الـ Approve بسلاسة
+    const SINU_ABI = [
+        "function approve(address spender, uint256 amount) public returns (bool)",
+        "function balanceOf(address account) public view returns (uint256)"
+    ];
 
-"];
+    // 2. الـ ABI الكامل والمصحح لعقد اللعبة الخاص بك المتوافق مع مكتبة Ethers.js
     const GAME_ABI = [
         "function createBountyChallenge(address _target, uint256 _amount) external",
         "function acceptAndFight(uint256 _challengeId) external",
-        "function executePveAssassination() external"
+        "function executePveAssassination() external",
+        "function buySurvivalItem(uint256 _itemType) external",
+        "function challengeCounter() view returns (uint256)",
+        "function challenges(uint256) view returns (address creator, address target, uint256 bountyAmount, bool isAccepted, bool isResolved)"
     ];
 
     let provider, signer, gameContract, tokenContract;
 
-    // 1. دالة ربط المحفظة
+    // دالة ربط المحفظة
     async function connectWallet() {
         if (window.ethereum) {
             try {
@@ -125,7 +127,7 @@
                 document.getElementById("walletAddress").innerText = "متصل بـ: " + address;
                 document.getElementById("connectBtn").innerText = "تم الاتصال ✅";
 
-                // تجهيز العقود برمجياً للتفاعل
+                // تجهيز العقود برمجياً للتفاعل بعد الإصلاح
                 gameContract = new ethers.Contract(GAME_CONTRACT_ADDRESS, GAME_ABI, signer);
                 tokenContract = new ethers.Contract(SINU_TOKEN_ADDRESS, SINU_ABI, signer);
             } catch (error) {
@@ -136,12 +138,13 @@
         }
     }
 
-    // 2. دالة الـ Approve
+    // دالة الـ Approve للموافقة على التوكن
     async function approveToken() {
         if (!tokenContract) return alert("الرجاء ربط المحفظة أولاً!");
         try {
             const amountInput = document.getElementById("approveAmount").value;
-            const amountInWei = ethers.parseUnits(amountInput, 18); // تحويل الرقم ليشمل الـ 18 صفر
+            if(!amountInput || amountInput <= 0) return alert("الرجاء إدخال كمية صالحة");
+            const amountInWei = ethers.parseUnits(amountInput, 18); 
             
             showStatus("جاري إرسال معاملة Approve للمحفظة...");
             const tx = await tokenContract.approve(GAME_CONTRACT_ADDRESS, amountInWei);
@@ -149,16 +152,17 @@
             await tx.wait();
             showStatus("تمت الموافقة بنجاح! يمكنك اللعب الآن.");
         } catch (error) {
-            showStatus("فشلت المعاملة: " + error.message);
+            showStatus("فشلت معاملة الموافقة: " + error.message);
         }
     }
 
-    // 3. دالة إنشاء تحدي PvP
+    // دالة إنشاء تحدي PvP
     async function createBounty() {
         if (!gameContract) return alert("الرجاء ربط المحفظة أولاً!");
         try {
             const target = document.getElementById("targetAddress").value;
             const amount = document.getElementById("bountyAmount").value;
+            if(!target || !amount) return alert("الرجاء ملء جميع الحقول");
             const amountInWei = ethers.parseUnits(amount, 18);
 
             showStatus("جاري إرسال طلب التحدي...");
@@ -171,11 +175,12 @@
         }
     }
 
-    // 4. دالة قبول قتال الـ PvP
+    // دالة قبول قتال الـ PvP
     async function acceptFight() {
         if (!gameContract) return alert("الرجاء ربط المحفظة أولاً!");
         try {
             const challengeId = document.getElementById("challengeIdInput").value;
+            if(!challengeId) return alert("الرجاء إدخال رقم التحدي صحيح");
 
             showStatus("جاري إرسال معاملة قبول القتال...");
             const tx = await gameContract.acceptAndFight(challengeId);
@@ -187,7 +192,7 @@
         }
     }
 
-    // 5. دالة تنفيذ الـ PvE السريع
+    // دالة تنفيذ الـ PvE السريع وحرق التوكن
     async function executePve() {
         if (!gameContract) return alert("الرجاء ربط المحفظة أولاً!");
         try {
@@ -195,9 +200,9 @@
             const tx = await gameContract.executePveAssassination();
             showStatus("المعاملة قيد التنفيذ على شبكة Base: " + tx.hash);
             await tx.wait();
-            showStatus("تمت العملية! تفقد سجل الأحداث (Logs) في المحفظة لرؤية رقم الحظ العشوائي الناتج.");
+            showStatus("تمت العملية بنجاح! تفقد سجل المعاملة على المحفظة لرؤية رقم الحظ الناتج.");
         } catch (error) {
-            showStatus("فشلت العملية (تأكد من امتلاكك لـ 5000 SINU ورصيد غاز): " + error.message);
+            showStatus("فشلت العملية (تأكد من عمل Approve مسبقاً، وامتلاك رصيد كافٍ وغاز): " + error.message);
         }
     }
 
