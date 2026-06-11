@@ -1,0 +1,15 @@
+{
+  "name": "SINU Mafia Syndicate",
+  "short_name": "SINU Mafia",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#ff3333",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
